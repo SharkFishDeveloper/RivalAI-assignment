@@ -21,10 +21,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (stored) {
       setTheme(stored)
       document.documentElement.classList.toggle('dark', stored === 'dark')
+      document.documentElement.style.colorScheme = stored === 'dark' ? 'dark' : 'light'
     } else {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
       setTheme(prefersDark ? 'dark' : 'light')
       document.documentElement.classList.toggle('dark', prefersDark)
+      document.documentElement.style.colorScheme = prefersDark ? 'dark' : 'light'
     }
   }, [])
 
@@ -33,6 +35,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       const next = prev === 'light' ? 'dark' : 'light'
       localStorage.setItem('theme', next)
       document.documentElement.classList.toggle('dark', next === 'dark')
+      document.documentElement.style.colorScheme = next === 'dark' ? 'dark' : 'light'
       return next
     })
   }, [])

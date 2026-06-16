@@ -3,20 +3,19 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { api } from '@/lib/api'
+import type { CreateTaskInput } from '@/types'
 import { useNotification } from '@/components/ui/notification'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { TaskForm } from '@/components/tasks/task-form'
-import type { CreateTaskInput } from '@/types'
-
 export default function CreateTaskPage() {
   const router = useRouter()
   const { notify } = useNotification()
   const [loading, setLoading] = useState(false)
 
-  async function handleSubmit(input: CreateTaskInput) {
+  async function handleSubmit(input: Record<string, unknown>) {
     setLoading(true)
     try {
-      const res = await api.createTask(input)
+      const res = await api.createTask(input as unknown as CreateTaskInput)
       notify('Task created', 'success')
       router.push(`/tasks/${res.task.id}`)
     } catch (err) {

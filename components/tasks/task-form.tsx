@@ -8,7 +8,7 @@ import type { CreateTaskInput, UpdateTaskInput, Task } from '@/types'
 
 interface Props {
   initial?: Task
-  onSubmit: (input: CreateTaskInput | UpdateTaskInput) => Promise<void>
+  onSubmit: (input: Record<string, unknown>) => Promise<void>
   loading?: boolean
 }
 
@@ -69,7 +69,7 @@ export function TaskForm({ initial, onSubmit, loading }: Props) {
           id="status"
           label="Status"
           value={status}
-          onChange={e => setStatus(e.target.value)}
+          onChange={e => setStatus(e.target.value as 'todo' | 'in_progress' | 'done')}
           options={[
             { value: 'todo', label: 'Todo' },
             { value: 'in_progress', label: 'In Progress' },
@@ -80,7 +80,7 @@ export function TaskForm({ initial, onSubmit, loading }: Props) {
           id="priority"
           label="Priority"
           value={priority}
-          onChange={e => setPriority(e.target.value)}
+          onChange={e => setPriority(e.target.value as "low" | "medium" | "high")}
           options={[
             { value: 'low', label: 'Low' },
             { value: 'medium', label: 'Medium' },

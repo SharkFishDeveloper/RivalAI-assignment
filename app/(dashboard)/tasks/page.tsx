@@ -53,7 +53,7 @@ export default function TaskListPage() {
   }
 
   async function handleToggleComplete(task: Task) {
-    const newStatus = task.status === 'done' ? 'todo' : 'done'
+    const newStatus: 'todo' | 'in_progress' | 'done' = task.status === 'done' ? 'todo' : 'done'
     const optimistic = tasks.map(t =>
       t.id === task.id ? { ...t, status: newStatus } : t
     )

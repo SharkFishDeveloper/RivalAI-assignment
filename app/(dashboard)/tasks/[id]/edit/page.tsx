@@ -26,10 +26,10 @@ export default function EditTaskPage() {
       .finally(() => setLoading(false))
   }, [id])
 
-  async function handleSubmit(input: UpdateTaskInput) {
+  async function handleSubmit(input: Record<string, unknown>) {
     setSaving(true)
     try {
-      await api.updateTask(id, input)
+      await api.updateTask(id, input as unknown as UpdateTaskInput)
       notify('Task updated', 'success')
       router.push(`/tasks/${id}`)
     } catch (err) {
