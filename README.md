@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task Manager Frontend
 
-## Getting Started
+Next.js frontend for the Task Manager application.
 
-First, run the development server:
+## Tech Stack
+
+- **Next.js** (App Router) with React 19
+- **TypeScript**
+- **Tailwind CSS v4**
+- **Jest** + Testing Library for unit tests
+
+## Setup
+
+### Prerequisites
+
+- Node.js 18+
+
+### Environment Variables
+
+Copy `.env.example` to `.env.local` and configure:
+
+| Variable              | Description        | Default                     |
+|----------------------|--------------------|-----------------------------|
+| NEXT_PUBLIC_API_URL  | Backend API URL    | http://localhost:8080/api   |
+
+### Run Locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Testing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm test
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Assumptions & Trade-offs
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- JWT tokens are stored in `localStorage` rather than httpOnly cookies for simplicity; this is acceptable for this scope but is vulnerable to XSS
+- No external state management library (React Query, SWR, Redux) — data fetching uses plain `useState`/`useEffect`; caching and refetching are manual
+- Optimistic updates on task toggle/delete are done client-side with manual rollback on error, trading consistency for perceived performance
+- No real-time updates (WebSocket/SSE); users must refresh to see changes made by others
+- No server-side rendering for authenticated pages — the dashboard layout awaits client-side auth before rendering content
+- Hand-rolled UI components (Button, Input, etc.) instead of a component library; gives full control but requires more maintenance
+- No dedicated form validation library — validation is inline and minimal (title required, max length)
+- No pagination on the admin users page — full user list is fetched and rendered at once
+- Error handling is basic: API errors are thrown as exceptions and displayed via toast notifications; no structured error boundary strategy
+- The app assumes tasks without due dates render gracefully and unlimited description/priority length from the API
+- Admin users cannot be created through the UI; they must be seeded directly in the database
